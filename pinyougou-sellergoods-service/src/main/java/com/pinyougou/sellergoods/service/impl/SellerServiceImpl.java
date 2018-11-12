@@ -64,17 +64,17 @@ public class SellerServiceImpl implements SellerService {
 	 * @return
 	 */
 	@Override
-	public TbSeller findOne(Long id){
-		return sellerMapper.selectByPrimaryKey(id.toString());
+	public TbSeller findOne(String id){
+		return sellerMapper.selectByPrimaryKey(id);
 	}
 
 	/**
 	 * 批量删除
 	 */
 	@Override
-	public void delete(Long[] ids) {
-		for(Long id:ids){
-			sellerMapper.deleteByPrimaryKey(id.toString());
+	public void delete(String[] ids) {
+		for(String id:ids){
+			sellerMapper.deleteByPrimaryKey(id);
 		}		
 	}
 	
@@ -159,5 +159,12 @@ public class SellerServiceImpl implements SellerService {
 		Page<TbSeller> page= (Page<TbSeller>)sellerMapper.selectByExample(example);		
 		return new PageResult(page.getTotal(), page.getResult());
 	}
-	
+
+	@Override
+	public void updateStatus(String sellerId, String status) {
+		//根据sellerId获取到这条商家信息，然后修改状态
+		TbSeller seller = sellerMapper.selectByPrimaryKey(sellerId);
+		seller.setStatus(status);
+		sellerMapper.updateByPrimaryKey(seller);
+	}
 }

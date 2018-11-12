@@ -43,7 +43,9 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService){
 			function(response){
 				if(response.success){
 					//重新查询 
-		        	$scope.reloadList();//重新加载
+                    // $scope.reloadList();//重新加载
+					alert("保存成功!");
+					$scope.entity={};
 				}else{
 					alert(response.message);
 				}
@@ -75,5 +77,8 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService){
 			}			
 		);
 	}
+    $scope.setEditorValue = function () {
+        $scope.entity.goodsDesc.introduction = editor.html();
+    }
     
 });	

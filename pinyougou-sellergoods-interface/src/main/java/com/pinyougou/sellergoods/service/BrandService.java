@@ -7,26 +7,20 @@ import java.util.List;
 import java.util.Map;
 
 public interface BrandService {
-    //查询所有
     List<TbBrand> findAll();
-
-    //分页
+    //分页查询数据
     PageResult findPage(int pageNum,int pageSize);
 
-    //新增
+    void  add(TbBrand brand);
 
-    void add(TbBrand brand);
-
-    //查找
+    //获取当前的Brand
     TbBrand findOne(Long id);
 
-    //修改
     void update(TbBrand brand);
 
-    //删除
     void dele(Long[] ids);
 
+    PageResult findSearch(TbBrand brand,int pageNum,int pageSize);
 
     List<Map> selectOptionList();
-
 }

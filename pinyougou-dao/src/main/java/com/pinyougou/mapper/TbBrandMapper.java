@@ -32,4 +32,5 @@ public interface TbBrandMapper {
     int updateByPrimaryKey(TbBrand record);
 
     List <Map> selectOptionList();
+
 }

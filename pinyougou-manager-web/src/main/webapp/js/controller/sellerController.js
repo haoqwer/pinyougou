@@ -75,5 +75,17 @@ app.controller('sellerController' ,function($scope,$controller   ,sellerService)
 			}			
 		);
 	}
+
+	$scope.updateStatus=function (sellerId,status) {
+		sellerService.updateStatus(sellerId,status).success(
+			function (respnose) {
+				if(respnose.success){
+					$scope.reloadList();
+				}else {
+					alert(respnose.message);
+				}
+            }
+		)
+    }
     
 });	

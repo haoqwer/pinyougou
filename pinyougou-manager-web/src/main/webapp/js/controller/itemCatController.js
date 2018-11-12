@@ -1,5 +1,5 @@
  //控制层 
-app.controller('itemCatController' ,function($scope,$controller   ,itemCatService){	
+app.controller('itemCatController' ,function($scope,$controller ,typeTemplateService,itemCatService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -33,10 +33,14 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 	
 	//保存 
 	$scope.save=function(){				
-		var serviceObject;//服务层对象  				
+		var serviceObject;//服务层对象
+		// $scope.entity.typeId=JSON.stringify($scope.entity.typeId).id;
+        // $scope.entity.typeId=jsonToString(entity.typeId,'id');
+		// alert(jsonToString($scope.entity.typeId,'id'));
 		if($scope.entity.id!=null){//如果有ID
 			serviceObject=itemCatService.update( $scope.entity ); //修改  
 		}else{
+            $scope.entity.parentId=$scope.parentId;//赋予上级 ID
 			serviceObject=itemCatService.add( $scope.entity  );//增加 
 		}				
 		serviceObject.success(
@@ -75,5 +79,47 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 			}			
 		);
 	}
-    
-});	
+    $scope.findByParentId=function (parentId) {
+        $scope.parentId=parentId;//记住上级 ID
+        itemCatService.findByParentId(parentId).success(
+            function (response) {
+
+                $scope.list=response;
+            }
+        )
+    }
+
+    $scope.grade=1;//默认为 1 级
+//设置级别
+    $scope.setGrade=function(value){
+        $scope.grade=value;
+    }
+//读取列表
+    $scope.selectList=function(p_entity){
+        if($scope.grade==1){//如果为 1 级
+            $scope.entity_1=null;
+            $scope.entity_2=null;
+        }
+        if($scope.grade==2){//如果为 2 级
+            $scope.entity_1=p_entity;
+            $scope.entity_2=null;
+        }
+        if($scope.grade==3){//如果为 3 级
+            $scope.entity_2=p_entity;
+        }
+        $scope.findByParentId(p_entity.id); //查询此级下级列表
+    }
+
+    $scope.typeTemplateList={data:[]};
+
+    $scope.selectOptionList=function () {
+		typeTemplateService.selectOptionList().success(
+			function(response){
+                $scope.typeTemplateList={data:response};
+			}
+		)
+    }
+
+
+
+});
